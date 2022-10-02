@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <title>Environmentalist</title>
+  </head>
+  <body>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+      #page {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      h1 {
+      }
+      #container {
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        width: 100%;
+        height: 80vh;
+        padding: 20px;
+      }
+
+      #left {
+        /* background-color: blue; */
+        height: 100%;
+        flex-grow: 3;
+        padding: 30px;
+      }
+
+      #center {
+        /* background-color: grey; */
+        height: 100%;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #right {
+        /* background-color: green; */
+        height: 100%;
+        flex-grow: 3;
+        padding: 30px;
+      }
+
+      textarea {
+        width: 100%;
+        height: 100%;
+      }
+
+      .buttons {
+        cursor: pointer;
+        font-weight: bold;
+      }
+    </style>
+
+    <div id="page">
+      <h1>Environmentalist</h1>
+      <div id="container">
+        <div id="left">
+          <textarea id="env-file"></textarea>
+        </div>
+        <div id="center">
+          <p class="buttons" onclick="toJson()">To JSON >>></p>
+          <p class="buttons" onclick="toEnv()"><<< To ENV</p>
+        </div>
+        <div id="right">
+          <textarea id="json-file"></textarea>
+        </div>
+
+        <script>
+          function toJson() {
+            console.log("converting to JSON!");
+            var json = {};
+            let data = document.getElementById("env-file").value;
+            let rows = data.split("\n");
+            for (var r of rows) {
+              if (r !== "") {
+                var vals = r.split("=");
+                json[vals[0]] = vals[1];
+              }
+            }
+            document.getElementById("json-file").value = JSON.stringify(json);
+          }
+
+          function toEnv() {
+            console.log("Converting to environment file!");
+            var env = "";
+            let data = document.getElementById("json-file").value;
+            data = data.replace(/(\r\n|\n|\r)/gm, "");
+            data = data.replace(/^\s+|\s+$/gm, "");
+            data = JSON.parse(data);
+            console.log(data);
+
+            for (var d of Object.keys(data)) {
+              env += `${d}=${data[d]}\n`;
+            }
+
+            document.getElementById("env-file").value = env;
+          }
+        </script>
+      </div>
+    </div>
+  </body>
+</html>
